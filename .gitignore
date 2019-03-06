@@ -1,3 +1,4 @@
 main
-main.o
-.makefile.swp
+*.swp
+*.o
+*.txt
