@@ -1,10 +1,10 @@
+#include "brd_out.h"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
-
 using namespace std;
 
-void brd_out(char board[9][9])
+/*void brd_out(char board[9][9])
 {
     ofstream outpt("output.txt");
     // создаём объект класса ofstream для записи
@@ -17,7 +17,7 @@ void brd_out(char board[9][9])
     }
     outpt.close();
     // закрываем файл
-}
+} */
 
 int main()
 {
@@ -31,15 +31,7 @@ int main()
                         {'2', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
                         {'1', 'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
                         {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}};
-    /*char* ukz;
-    ukz = new char[9 * 9];
-    if (ukz == NULL) {
-        printf(" Не удалось выделить память ");
-        return 1; // выход по ошибке, код ошибки 1
-    }
-    ukz = &board[0][0];*/
     brd_out(board);
 
-    // delete ukz;
     return 0;
 }
