@@ -1,4 +1,5 @@
 main
+all
 *.swp
 *.o
 *.txt
