@@ -1,19 +1,25 @@
-#include <fstream>
-#include <iostream>
 #include <stdio.h>
-using namespace std;
 
-void brd_out(char board[9][9])
+void brd_out(char board[9][9], int n, int m, char move[20])
 {
-    ofstream outpt("output.txt");
-    // создаём объект класса ofstream для записи
-    int i, u;
-    for (i = 0; i < 9; i++) {
-        for (u = 0; u < 9; u++) {
-            outpt << board[i][u] << " "; // запись в файл
-        }
-        outpt << endl;
+    FILE* fl;
+    if (move[0] == '0')
+        fl = fopen("output.txt", "wt");
+    else {
+        fl = fopen("output.txt", "at");
+        fputc('\n', fl);
+        fputs(move, fl);
+        fputc('\n', fl);
     }
-    outpt.close();
-    // закрываем файл
+    // ofstream outpt("output.txt");
+    int i, u;
+    for (i = 0; i < n; i++) {
+        for (u = 0; u < m; u++) {
+            fputc(board[i][u], fl);
+            fputc(' ', fl);
+            // outpt << board[i][u] << " "; // запись в файл
+        }
+        fputc('\n', fl);
+    }
+    fclose(fl);
 }
