@@ -5,7 +5,9 @@ objects = build/main.o build/brd_out.o build/brd_read.o
 
 .PHONY: all clean install uninstall
 
-all: $(objects)
+all: bin/main
+
+bin/main:	$(objects)
 	$(COMP) $^ -o $@
 
 build/main.o: src/main.cpp
