@@ -2,4 +2,4 @@ main
 all
 *.swp
 *.o
-*.txt
+output.txt
