@@ -121,7 +121,8 @@ int brd_read(char board[9][9], int n, int m)
 {
     FILE* inpt;
     inpt = fopen("input.txt", "r");
-    int i, flag, lr1, ud1, lr2, ud2, numb = 0, check;
+    int i, flag, lr1, ud1, lr2, ud2, numb = 0;
+    int check, typemove;
     char sg1[20], sg2[20], sg3[20], move[20];
     char fig1, fig2;
     while (!feof(inpt)) {
@@ -179,9 +180,13 @@ int brd_read(char board[9][9], int n, int m)
             return 1;
         }
         i++;
-        if (sg2[i] != '-') {
+        if (sg2[i] == '-')
+            typemove = 1; //тихий ход
+        else if (sg2[i] == 'x')
+            typemove = 2; //взятие
+        else {
             printf("неправильный вид входных данных, строка %d: ожидался "
-                   "знак '-' \n",
+                   "знак '-' или 'x' \n",
                    numb);
             return 1;
         }
@@ -196,7 +201,31 @@ int brd_read(char board[9][9], int n, int m)
             return 1;
         }
         if (board[ud1][lr1] == fig1) {
-            board[ud2][lr2] = fig1;
+            if (typemove == 1) {
+                if (board[ud2][lr2] == ' ')
+                    board[ud2][lr2] = fig1;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указан тихий ход, но в заверщающем поле стоит "
+                           "фигура \n",
+                           numb);
+                    return 1;
+                }
+            }
+
+            else { //взятие
+                if (board[ud2][lr2] == 'k' || board[ud2][lr2] == 'q'
+                    || board[ud2][lr2] == 'r' || board[ud2][lr2] == 'n'
+                    || board[ud2][lr2] == 'b' || board[ud2][lr2] == 'p')
+                    board[ud2][lr2] = fig1;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указано взятие, но в заверщающем поле нет фигуры"
+                           "черных \n",
+                           numb);
+                    return 1;
+                }
+            }
             board[ud1][lr1] = ' ';
             memset(move, 0, 20);
             strcat(move, sg1);
@@ -211,11 +240,6 @@ int brd_read(char board[9][9], int n, int m)
             return 1;
         }
         fscanf(inpt, "%s", sg3);
-        /*if (strcmp(sg3, "") == 0) {
-            printf("неправильный вид входных данных, строка %d: информация "
-                   "должна разделяться пробелами \n", numb);
-            return 1;
-        } */ //теперь ход черных
         i = 0;
         check = check_figure(sg3[i]);
         if (check == 3) {
@@ -242,9 +266,13 @@ int brd_read(char board[9][9], int n, int m)
             return 1;
         }
         i++;
-        if (sg3[i] != '-') {
+        if (sg3[i] == '-')
+            typemove = 1; //тихий ход
+        else if (sg3[i] == 'x')
+            typemove = 2; //взятие
+        else {
             printf("неправильный вид входных данных, строка %d: ожидался "
-                   "знак '-' \n",
+                   "знак '-' или 'x' \n",
                    numb);
             return 1;
         }
@@ -259,7 +287,29 @@ int brd_read(char board[9][9], int n, int m)
             return 1;
         }
         if (board[ud1][lr1] == fig2) {
-            board[ud2][lr2] = fig2;
+            if (typemove == 1) {
+                if (board[ud2][lr2] == ' ')
+                    board[ud2][lr2] = fig2;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указан тихий ход, но в заверщающем поле стоит "
+                           "фигура \n",
+                           numb);
+                    return 1;
+                }
+            } else { //взятие
+                if (board[ud2][lr2] == 'K' || board[ud2][lr2] == 'Q'
+                    || board[ud2][lr2] == 'R' || board[ud2][lr2] == 'N'
+                    || board[ud2][lr2] == 'B' || board[ud2][lr2] == 'P')
+                    board[ud2][lr2] = fig2;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указано взятие, но в заверщающем поле нет фигуры"
+                           "белых \n",
+                           numb);
+                    return 1;
+                }
+            }
             board[ud1][lr1] = ' ';
             memset(move, 0, 20);
             strcat(move, sg1);
