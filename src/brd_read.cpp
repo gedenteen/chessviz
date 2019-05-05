@@ -5,12 +5,126 @@
 #include <string.h>
 using namespace std;
 
+int check_figure(char ch)
+{
+    switch (ch) {
+    case 'K': //не пешка
+    case 'Q':
+    case 'R':
+    case 'N':
+    case 'B':
+        return 1;
+        break;
+    case 'P':
+    case 'a': //пешка
+    case 'b':
+    case 'c':
+    case 'd':
+    case 'e':
+    case 'f':
+    case 'g':
+    case 'h':
+        return 2;
+        break;
+    default:
+        return 3;
+        break;
+    }
+}
+int check_ud(char ch)
+{
+    switch (ch) {
+    case '8':
+        return 0;
+        break;
+    case '7':
+        return 1;
+        break;
+    case '6':
+        return 2;
+        break;
+    case '5':
+        return 3;
+        break;
+    case '4':
+        return 4;
+        break;
+    case '3':
+        return 5;
+        break;
+    case '2':
+        return 6;
+        break;
+    case '1':
+        return 7;
+        break;
+    default:
+        return -1;
+        break;
+    }
+}
+int check_lr(char ch)
+{
+    switch (ch) {
+    case 'a':
+        return 1;
+        break;
+    case 'b':
+        return 2;
+        break;
+    case 'c':
+        return 3;
+        break;
+    case 'd':
+        return 4;
+        break;
+    case 'e':
+        return 5;
+        break;
+    case 'f':
+        return 6;
+        break;
+    case 'g':
+        return 7;
+        break;
+    case 'h':
+        return 8;
+        break;
+    default:
+        return -1;
+        break;
+    }
+}
+char black_change(char ch)
+{
+    switch (ch) {
+    case 'K':
+        ch = 'k';
+        break;
+    case 'Q':
+        ch = 'q';
+        break;
+    case 'R':
+        ch = 'r';
+        break;
+    case 'N':
+        ch = 'n';
+        break;
+    case 'B':
+        ch = 'b';
+        break;
+    }
+    return ch;
+}
+
 int brd_read(char board[9][9], int n, int m)
 {
     FILE* inpt;
     inpt = fopen("input.txt", "r");
-    int i, flag, lr1, up1, lr2, up2, numb = 0;
+    int i, flag, lr1, ud1, lr2, ud2, numb = 0;
+    int check, typemove;
     char sg1[20], sg2[20], sg3[20], move[20];
+    char fig1, fig2;
     while (!feof(inpt)) {
         fscanf(inpt, "%s", sg1);
         numb++;
@@ -21,166 +135,98 @@ int brd_read(char board[9][9], int n, int m)
         do {
             if (sg1[i] > '0' && sg1[i] < '9')
                 i++;
-            if (sg1[i] != '.') {
-                printf(" код ошибки 1: номер хода указан неправильно: должны "
-                       "быть число и точка после него \n");
-                return 1;
-            } else
+            else
                 flag = 0;
         } while (flag);
+        if (sg1[i] != '.') {
+            printf("неправильный вид входных данных, строка %d: в начале "
+                   "строки должны быть число и точка после него, обозначающие "
+                   "номер хода \n",
+                   numb);
+            return 1;
+        }
         i++;
         fscanf(inpt, "%s", sg2);
         if (strcmp(sg2, "") == 0) {
-            printf(" код ошибки 2: информация должна разделяться "
-                   "пробелами \n");
-            return 2;
+            printf("неправильный вид входных данных, строка %d: информация "
+                   "должна разделяться "
+                   "пробелами \n",
+                   numb);
+            return 1;
         }
         i = 0;
-        switch (sg2[i]) {
-        case 'a':
-            lr1 = 1;
-            break;
-        case 'b':
-            lr1 = 2;
-            break;
-        case 'c':
-            lr1 = 3;
-            break;
-        case 'd':
-            lr1 = 4;
-            break;
-        case 'e':
-            lr1 = 5;
-            break;
-        case 'f':
-            lr1 = 6;
-            break;
-        case 'g':
-            lr1 = 7;
-            break;
-        case 'h':
-            lr1 = 8;
-            break;
-        default: {
-            printf(" код ошибки 3: неправильно введено поле по "
-                   "горизонтали: строка %d, символ: %c \n",
-                   numb,
-                   sg2[i]);
-            return 3;
+        check = check_figure(sg2[i]);
+        if (check == 3) {
+            printf("неправильный вид входных данных, строка %d: неправильный "
+                   "символ после первого пробела \n",
+                   numb);
+            return 1;
+        } else if (check == 2) { //пешка
+            fig1 = 'P';          //потмоу что ход белых
+            lr1 = check_lr(sg2[i]);
+            i++;
+            ud1 = check_ud(sg2[i]);
+        } else if (check == 1) { //не пешка
+            fig1 = sg2[i];
+            i++;
+            lr1 = check_lr(sg2[i]);
+            i++;
+            ud1 = check_ud(sg2[i]);
         }
+        if (lr1 == -1 || ud1 == -1) {
+            printf("неправильный вид входных данных, строка %d: неправильные "
+                   "начальные координаты для хода белых \n",
+                   numb);
+            return 1;
         }
         i++;
-        switch (sg2[i]) {
-        case '1':
-            up1 = 7;
-            break;
-        case '2':
-            up1 = 6;
-            break;
-        case '3':
-            up1 = 5;
-            break;
-        case '4':
-            up1 = 4;
-            break;
-        case '5':
-            up1 = 3;
-            break;
-        case '6':
-            up1 = 2;
-            break;
-        case '7':
-            up1 = 1;
-            break;
-        case '8':
-            up1 = 0;
-            break;
-        default: {
-            printf(" код ошибки 4: неправильно введено поле по "
-                   "вертикали: строка %d, символ: %c \n",
-                   numb,
-                   sg2[i]);
-            return 4;
-        }
+        if (sg2[i] == '-')
+            typemove = 1; //тихий ход
+        else if (sg2[i] == 'x')
+            typemove = 2; //взятие
+        else {
+            printf("неправильный вид входных данных, строка %d: ожидался "
+                   "знак '-' или 'x' \n",
+                   numb);
+            return 1;
         }
         i++;
-        if (sg2[i] != '-') {
-            printf(" код ошибки 5: ожидался знак '-': строка %d, символ: %c \n",
-                   numb,
-                   sg2[i]);
-            return 5;
-        }
+        lr2 = check_lr(sg2[i]);
         i++;
-        switch (sg2[i]) {
-        case 'a':
-            lr2 = 1;
-            break;
-        case 'b':
-            lr2 = 2;
-            break;
-        case 'c':
-            lr2 = 3;
-            break;
-        case 'd':
-            lr2 = 4;
-            break;
-        case 'e':
-            lr2 = 5;
-            break;
-        case 'f':
-            lr2 = 6;
-            break;
-        case 'g':
-            lr2 = 7;
-            break;
-        case 'h':
-            lr2 = 8;
-            break;
-        default: {
-            printf(" код ошибки 3: неправильно введено поле по "
-                   "горизонтали: строка %d, символ: %c \n",
-                   numb,
-                   sg2[i]);
-            return 3;
+        ud2 = check_ud(sg2[i]);
+        if (lr2 == -1 || ud2 == -1) {
+            printf("неправильный вид входных данных, строка %d: неправильные "
+                   "завершающие координаты для хода белых \n",
+                   numb);
+            return 1;
         }
-        }
-        i++;
-        switch (sg2[i]) {
-        case '1':
-            up2 = 7;
-            break;
-        case '2':
-            up2 = 6;
-            break;
-        case '3':
-            up2 = 5;
-            break;
-        case '4':
-            up2 = 4;
-            break;
-        case '5':
-            up2 = 3;
-            break;
-        case '6':
-            up2 = 2;
-            break;
-        case '7':
-            up2 = 1;
-            break;
-        case '8':
-            up2 = 0;
-            break;
-        default: {
-            printf(" код ошибки 4: неправильно введено поле по "
-                   "вертикали: строка %d, символ: %c \n",
-                   numb,
-                   sg2[i]);
-            return 4;
-        }
-        }
-        if (board[up1][lr1] == 'P' || board[up1][lr1] == 'p') {
-            board[up2][lr2] = board[up1][lr1];
-            board[up1][lr1] = ' ';
+        if (board[ud1][lr1] == fig1) {
+            if (typemove == 1) {
+                if (board[ud2][lr2] == ' ')
+                    board[ud2][lr2] = fig1;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указан тихий ход, но в заверщающем поле стоит "
+                           "фигура \n",
+                           numb);
+                    return 1;
+                }
+            }
+
+            else { //взятие
+                if (board[ud2][lr2] == 'k' || board[ud2][lr2] == 'q'
+                    || board[ud2][lr2] == 'r' || board[ud2][lr2] == 'n'
+                    || board[ud2][lr2] == 'b' || board[ud2][lr2] == 'p')
+                    board[ud2][lr2] = fig1;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указано взятие, но в заверщающем поле нет фигуры"
+                           "черных \n",
+                           numb);
+                    return 1;
+                }
+            }
+            board[ud1][lr1] = ' ';
             memset(move, 0, 20);
             strcat(move, sg1);
             strcat(move, " ");
@@ -188,162 +234,83 @@ int brd_read(char board[9][9], int n, int m)
             strcat(move, "\n");
             brd_out(board, n, m, move);
         } else {
-            printf(" код ошибки 6: в указанном поле нет пешки: строка %d \n",
+            printf("неправильный вид входных данных, строка %d: в указанном "
+                   "поле нет заданной белой фигуры \n",
                    numb);
-            return 6;
+            return 1;
         }
         fscanf(inpt, "%s", sg3);
-        if (strcmp(sg3, "") == 0) {
-            printf(" код ошибки 2: информация должна разделяться "
-                   "пробелами \n");
-            return 2;
-        }
         i = 0;
-        switch (sg3[i]) {
-        case 'a':
-            lr1 = 1;
-            break;
-        case 'b':
-            lr1 = 2;
-            break;
-        case 'c':
-            lr1 = 3;
-            break;
-        case 'd':
-            lr1 = 4;
-            break;
-        case 'e':
-            lr1 = 5;
-            break;
-        case 'f':
-            lr1 = 6;
-            break;
-        case 'g':
-            lr1 = 7;
-            break;
-        case 'h':
-            lr1 = 8;
-            break;
-        default: {
-            printf(" код ошибки 3: неправильно введено поле по "
-                   "горизонтали: строка %d, символ: %c \n",
-                   numb,
-                   sg3[i]);
-            return 3;
+        check = check_figure(sg3[i]);
+        if (check == 3) {
+            printf("неправильный вид входных данных, строка %d: "
+                   "неправильный символ после второго пробела \n",
+                   numb);
+            return 1;
+        } else if (check == 2) { //пешка
+            fig2 = 'p';          //потмоу что ход черных
+            lr1 = check_lr(sg3[i]);
+            i++;
+            ud1 = check_ud(sg3[i]);
+        } else if (check == 1) { //не пешка
+            fig2 = black_change(sg3[i]);
+            i++;
+            lr1 = check_lr(sg3[i]);
+            i++;
+            ud1 = check_ud(sg3[i]);
         }
+        if (lr1 == -1 || ud1 == -1) {
+            printf("неправильный вид входных данных, строка %d: неправильные "
+                   "начальные координаты для хода черных \n",
+                   numb);
+            return 1;
         }
         i++;
-        switch (sg3[i]) {
-        case '1':
-            up1 = 7;
-            break;
-        case '2':
-            up1 = 6;
-            break;
-        case '3':
-            up1 = 5;
-            break;
-        case '4':
-            up1 = 4;
-            break;
-        case '5':
-            up1 = 3;
-            break;
-        case '6':
-            up1 = 2;
-            break;
-        case '7':
-            up1 = 1;
-            break;
-        case '8':
-            up1 = 0;
-            break;
-        default: {
-            printf(" код ошибки 4: неправильно введено поле по "
-                   "вертикали: строка %d, символ: %c \n",
-                   numb,
-                   sg3[i]);
-            return 4;
-        }
+        if (sg3[i] == '-')
+            typemove = 1; //тихий ход
+        else if (sg3[i] == 'x')
+            typemove = 2; //взятие
+        else {
+            printf("неправильный вид входных данных, строка %d: ожидался "
+                   "знак '-' или 'x' \n",
+                   numb);
+            return 1;
         }
         i++;
-        if (sg3[i] != '-') {
-            printf(" код ошибки 5: ожидался знак '-': строка %d, символ: %c \n",
-                   numb,
-                   sg3[i]);
-            return 5;
-        }
+        lr2 = check_lr(sg3[i]);
         i++;
-        switch (sg3[i]) {
-        case 'a':
-            lr2 = 1;
-            break;
-        case 'b':
-            lr2 = 2;
-            break;
-        case 'c':
-            lr2 = 3;
-            break;
-        case 'd':
-            lr2 = 4;
-            break;
-        case 'e':
-            lr2 = 5;
-            break;
-        case 'f':
-            lr2 = 6;
-            break;
-        case 'g':
-            lr2 = 7;
-            break;
-        case 'h':
-            lr2 = 8;
-            break;
-        default: {
-            printf(" код ошибки 3: неправильно введено поле по "
-                   "горизонтали: строка %d, символ: %c \n",
-                   numb,
-                   sg3[i]);
-            return 3;
+        ud2 = check_ud(sg3[i]);
+        if (lr2 == -1 || ud2 == -1) {
+            printf("неправильный вид входных данных, строка %d: неправильные "
+                   "завершающие координаты для хода черных \n",
+                   numb);
+            return 1;
         }
-        }
-        i++;
-        switch (sg3[i]) {
-        case '1':
-            up2 = 7;
-            break;
-        case '2':
-            up2 = 6;
-            break;
-        case '3':
-            up2 = 5;
-            break;
-        case '4':
-            up2 = 4;
-            break;
-        case '5':
-            up2 = 3;
-            break;
-        case '6':
-            up2 = 2;
-            break;
-        case '7':
-            up2 = 1;
-            break;
-        case '8':
-            up2 = 0;
-            break;
-        default: {
-            printf(" код ошибки 4: неправильно введено поле по "
-                   "вертикали: строка %d, символ: %c \n",
-                   numb,
-                   sg3[i]);
-            return 4;
-        }
-        }
-        if (board[up1][lr1] == 'P' || board[up1][lr1] == 'p') {
-            board[up2][lr2] = board[up1][lr1];
-            board[up1][lr1] = ' ';
+        if (board[ud1][lr1] == fig2) {
+            if (typemove == 1) {
+                if (board[ud2][lr2] == ' ')
+                    board[ud2][lr2] = fig2;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указан тихий ход, но в заверщающем поле стоит "
+                           "фигура \n",
+                           numb);
+                    return 1;
+                }
+            } else { //взятие
+                if (board[ud2][lr2] == 'K' || board[ud2][lr2] == 'Q'
+                    || board[ud2][lr2] == 'R' || board[ud2][lr2] == 'N'
+                    || board[ud2][lr2] == 'B' || board[ud2][lr2] == 'P')
+                    board[ud2][lr2] = fig2;
+                else {
+                    printf("неправильный вид входных данных, строка %d: "
+                           "указано взятие, но в заверщающем поле нет фигуры"
+                           "белых \n",
+                           numb);
+                    return 1;
+                }
+            }
+            board[ud1][lr1] = ' ';
             memset(move, 0, 20);
             strcat(move, sg1);
             strcat(move, " ");
@@ -351,9 +318,10 @@ int brd_read(char board[9][9], int n, int m)
             strcat(move, "\n");
             brd_out(board, n, m, move);
         } else {
-            printf(" код ошибки 6: в указанном поле нет пешки: строка %d \n",
+            printf("неправильный вид входных данных, строка %d: в указанном "
+                   "поле нет заданной черной фигуры \n",
                    numb);
-            return 6;
+            return 1;
         }
     }
     return 0;
