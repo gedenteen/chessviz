@@ -1,22 +1,13 @@
 #include "brd_out.h"
 #include "brd_read.h"
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
+//#include <cstdlib>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-using namespace std;
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
     int n = 9, m = 9;
-    // char** board;
-    // board = new char*[n];
-    // for (int i = 0; i < n; i++) {
-    //    board[i] = new char[m];
-    //}
     char board[9][9] = {{'8', 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
                         {'7', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
                         {'6', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
