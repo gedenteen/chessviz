@@ -59,7 +59,7 @@ CTEST(w_pawn, quiet_wrong)
                         {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}};
     char sg[] = {'e', '6', '-', 'e', '7'};
     int ret = brd_read(board, 9, 9, sg, 'w');
-    ASSERT_EQUAL(0, ret);
+    ASSERT_EQUAL(1, ret);
 }
 CTEST(b_pawn, quiet_wrong)
 {
@@ -74,7 +74,7 @@ CTEST(b_pawn, quiet_wrong)
                         {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}};
     char sg[] = {'e', '8', '-', 'e', '9'};
     int ret = brd_read(board, 9, 9, sg, 'b');
-    ASSERT_EQUAL(0, ret);
+    ASSERT_EQUAL(1, ret);
 }
 CTEST(w_pawn, take_move)
 {
@@ -119,7 +119,7 @@ CTEST(b_pawn, take_wrong)
                         {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}};
     char sg[] = {'b', '5', 'x', 'b', '4'};
     int ret = brd_read(board, 9, 9, sg, 'b');
-    ASSERT_EQUAL(0, ret);
+    ASSERT_EQUAL(1, ret);
 }
 CTEST(b_rook, quiet_move)
 {
@@ -164,7 +164,7 @@ CTEST(b_rook, take_wrong)
                         {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}};
     char sg[] = {'R', 'h', '8', 'x', 'd', '8'};
     int ret = brd_read(board, 9, 9, sg, 'b');
-    ASSERT_EQUAL(0, ret);
+    ASSERT_EQUAL(1, ret);
 }
 CTEST(w_rook, quiet_move)
 {
@@ -224,7 +224,7 @@ CTEST(b_bishop, quiet_wrong)
                         {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}};
     char sg[] = {'B', 'a', '8', '-', 'c', '6'};
     int ret = brd_read(board, 9, 9, sg, 'b');
-    ASSERT_EQUAL(0, ret);
+    ASSERT_EQUAL(1, ret);
 }
 CTEST(w_queen, quiet_move)
 {
@@ -284,5 +284,5 @@ CTEST(w_king, take_wrong)
                         {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}};
     char sg[] = {'K', 'e', '1', 'x', 'f', '1'};
     int ret = brd_read(board, 9, 9, sg, 'w');
-    ASSERT_EQUAL(0, ret);
+    ASSERT_EQUAL(1, ret);
 }
