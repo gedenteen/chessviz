@@ -39,4 +39,4 @@ build/test/brd_read.o: src/brd_read.c
 	$(COMP) $(INCLUDE) $(FLAGS) $@ $<
 
 clean:
-	rm -rf build/src/*.o build/src/*.d build/test/*.o built/test/*.d
+	rm -rf build/src/*.o build/src/*.d build/test/*.o build/test/*.d
