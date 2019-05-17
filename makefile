@@ -8,6 +8,8 @@ INCLUDE = -I thirdparty -I src
 
 all: bin/chessviz
 
+-include build/src/*.d
+
 bin/chessviz:	$(objects)
 	$(COMP) -o $@ $^
 
@@ -21,6 +23,8 @@ build/src/brd_out.o: src/brd_out.c
 	$(COMP) $(FLAGS) $@ $<
 
 test: bin/chessviz-test
+
+-include build/test/*.d
 
 bin/chessviz-test: build/test/main.o build/test/brd_read.o build/test/brd_test.o
 	$(COMP) -o $@ $^
