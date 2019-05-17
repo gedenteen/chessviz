@@ -146,7 +146,7 @@ int brd_read(char board[9][9], int n, int m, char* sg, char color)
     }
     if (lr1 == -1 || ud1 == -1) {
         printf("неправильный вид входных данных, строка %d: неправильные "
-               "начальные координаты для хода белых \n",
+               "начальные координаты \n",
                numb);
         return 1;
     }
@@ -167,7 +167,7 @@ int brd_read(char board[9][9], int n, int m, char* sg, char color)
     ud2 = check_ud(sg[i]);
     if (lr2 == -1 || ud2 == -1) {
         printf("неправильный вид входных данных, строка %d: неправильные "
-               "завершающие координаты для хода белых \n",
+               "завершающие координаты \n",
                numb);
         return 1;
     }
