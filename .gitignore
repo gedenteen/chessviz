@@ -1,5 +1,8 @@
+chessviz
+chessviz-test
 main
 all
 *.swp
 *.o
 output.txt
+*.d
